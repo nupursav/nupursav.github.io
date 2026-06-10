@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio — Your Name</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="index.html" class="nav-logo">Your Name</a>
+    <div class="nav-links">
+      <a href="index.html">About</a>
+      <a href="portfolio.html" class="active">Portfolio</a>
+    </div>
+  </nav>
+
+  <section class="portfolio-hero">
+    <span class="eyebrow">Selected Work</span>
+    <h1>Communications Portfolio</h1>
+    <p class="hero-sub">Work samples organized by role and project — from brand campaigns and media strategy to graduate research and student org content.</p>
+  </section>
+
+  <!-- FILTER TABS -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="job">Work Experience</button>
+    <button class="filter-btn" data-filter="grad">Graduate Projects</button>
+    <button class="filter-btn" data-filter="club">Student Org</button>
+  </div>
+
+  <!-- PORTFOLIO GRID -->
+  <section class="portfolio-grid" id="portfolio-grid">
+
+    <!-- WORK EXPERIENCE SAMPLES -->
+    <div class="portfolio-card" data-category="job">
+      <div class="card-img-wrap">
+        <img src="assets/images/sample1.jpg" alt="Campaign Name" onerror="this.parentElement.classList.add('img-placeholder')"/>
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Communications Manager · Org Name</span>
+        <h3>Press Campaign: [Campaign Name]</h3>
+        <p>Developed and executed a media campaign resulting in X placements across national outlets. Managed messaging across earned and owned channels.</p>
+        <a href="#" class="card-link">View Sample →</a>
+      </div>
+    </div>
+
+    <div class="portfolio-card" data-category="job">
+      <div class="card-img-wrap">
+        <img src="assets/images/sample2.jpg" alt="Social Strategy" onerror="this.parentElement.classList.add('img-placeholder')"/>
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Communications Associate · Org Name</span>
+        <h3>Social Media Strategy Overhaul</h3>
+        <p>Redesigned content calendar and brand voice guidelines. Increased engagement rate by X% over six months across LinkedIn, Instagram, and Twitter.</p>
+        <a href="#" class="card-link">View Sample →</a>
+      </div>
+    </div>
+
+    <!-- GRADUATE PROJECT SAMPLES -->
+    <div class="portfolio-card" data-category="grad">
+      <div class="card-img-wrap">
+        <img src="assets/images/sample3.jpg" alt="Thesis" onerror="this.parentElement.classList.add('img-placeholder')"/>
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Graduate Research · University Name</span>
+        <h3>Thesis: [Your Thesis Title]</h3>
+        <p>Examined [topic] through qualitative analysis of [methodology]. Key finding: [one-sentence insight].</p>
+        <a href="#" class="card-link">Read Abstract →</a>
+      </div>
+    </div>
+
+    <div class="portfolio-card" data-category="grad">
+      <div class="card-img-wrap">
+        <img src="assets/images/sample4.jpg" alt="Campaign Audit" onerror="this.parentElement.classList.add('img-placeholder')"/>
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Graduate Project · Comms Strategy Course</span>
+        <h3>Brand Audit & Repositioning Strategy</h3>
+        <p>Full communications audit and strategic repositioning plan for a real nonprofit client as part of a graduate capstone project.</p>
+        <a href="#" class="card-link">View Deck →</a>
+      </div>
+    </div>
+
+    <!-- STUDENT ORG SAMPLES -->
+    <div class="portfolio-card" data-category="club">
+      <div class="card-img-wrap">
+        <img src="assets/images/sample5.jpg" alt="Newsletter" onerror="this.parentElement.classList.add('img-placeholder')"/>
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Communications Director · Grad Student Association</span>
+        <h3>Monthly Newsletter Redesign</h3>
+        <p>Rebranded and redesigned the association's monthly newsletter. Grew open rates from 22% to 41% over one academic year.</p>
+        <a href="#" class="card-link">View Issue →</a>
+      </div>
+    </div>
+
+    <div class="portfolio-card" data-category="club">
+      <div class="card-img-wrap">
+        <img src="assets/images/sample6.jpg" alt="Event" onerror="this.parentElement.classList.add('img-placeholder')"/>
+      </div>
+      <div class="card-body">
+        <span class="card-tag">Communications Director · Grad Student Association</span>
+        <h3>Annual Conference Comms Package</h3>
+        <p>End-to-end communications for a 200-person graduate conference: promotional graphics, email drip, press outreach, and on-site signage.</p>
+        <a href="#" class="card-link">View Materials →</a>
+      </div>
+    </div>
+
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 Your Name &nbsp;·&nbsp; <a href="mailto:you@email.com">you@email.com</a> &nbsp;·&nbsp; <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
