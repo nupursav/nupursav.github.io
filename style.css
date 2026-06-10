@@ -4,7 +4,7 @@
   --surface: #FFFFFF;
   --ink: #1A1A1A;
   --ink-muted: #6B6B6B;
-  --accent: #2D5BE3;
+  --accent: #0a33ac;
   --accent-light: #EEF2FD;
   --border: #E5E4E1;
   --radius: 12px;
@@ -31,26 +31,29 @@ img { max-width: 100%; display: block; }
   top: 0;
   z-index: 100;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  padding: 1.2rem 5%;
-  background: rgba(249,248,246,0.92);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
+  gap: 0.5rem;
+  padding: 1.25rem 5% 1rem;
+  background: #0a2e97;
+  box-shadow: 0 4px 20px rgba(10, 46, 151, 0.35);
 }
 .nav-logo {
   font-family: var(--font-display);
-  font-size: 1.2rem;
+  font-size: 1.55rem;
   letter-spacing: -0.01em;
+  color: #ffffff;
 }
 .nav-links { display: flex; gap: 2rem; }
 .nav-links a {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 400;
-  color: var(--ink-muted);
+  color: rgba(255,255,255,0.72);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   transition: color 0.2s;
 }
-.nav-links a:hover, .nav-links a.active { color: var(--ink); }
+.nav-links a:hover, .nav-links a.active { color: #ffffff; }
 
 /* ─── EYEBROW ─────────────────────────────────── */
 .eyebrow {
@@ -121,9 +124,12 @@ img { max-width: 100%; display: block; }
 
 /* ─── RESUME SECTION ─────────────────────────── */
 .resume-section {
-  max-width: 800px;
+  max-width: 860px;
   margin: 0 auto;
   padding: 5rem 5%;
+}
+.resume-section + .resume-section {
+  padding-top: 0;
 }
 .section-header { margin-bottom: 3rem; }
 .section-header h2 {
@@ -132,12 +138,25 @@ img { max-width: 100%; display: block; }
   letter-spacing: -0.02em;
 }
 
+/* ─── SUBSECTION HEADER ───────────────────────── */
+.subsection-header {
+  margin-top: 4rem;
+  margin-bottom: 1.5rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--border);
+}
+.subsection-header h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
 /* ─── TIMELINE ────────────────────────────────── */
-.timeline { display: flex; flex-direction: column; gap: 0; }
+.timeline { display: flex; flex-direction: column; }
 
 .timeline-item {
   display: grid;
-  grid-template-columns: 180px 1fr;
+  grid-template-columns: 160px 1fr;
   gap: 2rem;
   padding: 2rem 0;
   border-top: 1px solid var(--border);
@@ -167,25 +186,65 @@ img { max-width: 100%; display: block; }
 }
 
 .timeline-content h3 {
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   font-weight: 500;
   margin-bottom: 0.2rem;
 }
 .timeline-org {
   font-size: 0.85rem;
   color: var(--ink-muted);
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+.timeline-detail {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  margin-top: 0.4rem;
 }
 .timeline-content p { font-size: 0.92rem; color: var(--ink-muted); }
 
+/* ─── TIMELINE BULLETS ────────────────────────── */
+.timeline-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.timeline-bullets li {
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+  padding-left: 1.1rem;
+  position: relative;
+  line-height: 1.55;
+}
+.timeline-bullets li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 500;
+}
+
 /* ─── SKILLS ──────────────────────────────────── */
+.skills-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.skills-group-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 0.6rem;
+}
 .skills-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border);
+  gap: 0.5rem;
 }
 .skill-chip {
   background: var(--surface);
@@ -309,7 +368,6 @@ img { max-width: 100%; display: block; }
   font-size: 0.85rem;
   font-weight: 500;
   color: var(--accent);
-  transition: gap 0.2s;
 }
 .card-link:hover { text-decoration: underline; }
 
