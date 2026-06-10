@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nupur Savani</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+  <style>
+
+    /* ── Circular headshot ── */
+    .hero-img img {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top center;
+      border: 4px solid var(--accent-light);
+      box-shadow: 0 8px 32px rgba(10,46,151,0.15);
+    }
+    .photo-placeholder {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+    }
+
+    /* ── Larger nav text ── */
+    .nav-logo { font-size: 1.55rem !important; }
+    .nav-links a { font-size: 1rem !important; }
+
+    /* ── Two CTA buttons side by side ── */
+    .hero-btns {
+      display: flex;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+      margin-top: 0;
+    }
+    .btn-outline {
+      display: inline-block;
+      background: transparent;
+      color: var(--accent);
+      border: 1.5px solid var(--accent);
+      padding: 0.75rem 1.75rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+      font-family: var(--font-body);
+      text-decoration: none;
+    }
+    .btn-outline:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    /* ── Sticky section labels ── */
+    .sticky-section-label {
+      position: sticky;
+      top: 72px; /* height of nav */
+      z-index: 50;
+      background: rgba(249,248,246,0.97);
+      backdrop-filter: blur(8px);
+      padding: 0.75rem 0 0.6rem;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sticky-section-label .eyebrow { margin-bottom: 0.2rem; }
+    .sticky-section-label h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    /* override the original .section-header so it doesn't add double margin */
+    .section-header-replaced { margin-bottom: 1rem; }
+
+    /* ── Work sample tiles ── */
+    .work-samples-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    .sample-tile {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: var(--accent-light);
+      flex-shrink: 0;
+      transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+      position: relative;
+    }
+    .sample-tile:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(10,46,151,0.18);
+    }
+    .sample-tile img,
+    .sample-tile video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .sample-tile .tile-pdf {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 3px;
+    }
+    .tile-pdf svg { width: 22px; height: 22px; color: var(--accent); opacity: 0.75; }
+    .tile-pdf span { font-size: 0.55rem; color: var(--accent); font-weight: 500; text-align: center; line-height: 1.2; padding: 0 4px; }
+
+    /* ── Lightbox (same pattern as portfolio) ── */
+    .lb-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(10,18,40,0.82);
+      backdrop-filter: blur(6px);
+      align-items: center; justify-content: center;
+    }
+    .lb-overlay.open { display: flex; }
+
+    .lb-box {
+      background: var(--surface);
+      border-radius: 16px;
+      width: min(92vw, 860px);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 32px 80px rgba(10,18,40,0.4);
+    }
+    .lb-box-header {
+      padding: 1.3rem 1.6rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .lb-box-org {
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 0.25rem;
+    }
+    .lb-box-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem; letter-spacing: -0.01em; margin-bottom: 0.6rem;
+    }
+    .lb-box-types { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .lb-type-tag {
+      font-size: 0.71rem; font-weight: 500;
+      background: var(--accent-light); color: var(--accent);
+      padding: 0.2rem 0.65rem; border-radius: 100px;
+      border: 1px solid rgba(10,46,151,0.15);
+    }
+    .lb-box-media {
+      flex: 1; overflow-y: auto;
+      display: flex; align-items: center; justify-content: center;
+      background: #f0f1f5; min-height: 260px;
+    }
+    .lb-box-media iframe { width: 100%; height: 500px; border: none; display: block; }
+    .lb-box-media img { max-width: 100%; max-height: 500px; object-fit: contain; display: block; }
+    .lb-box-media video { max-width: 100%; max-height: 500px; display: block; }
+    .lb-box-footer {
+      padding: 0.85rem 1.6rem;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0; gap: 1rem;
+    }
+    .lb-box-counter { font-size: 0.82rem; color: var(--ink-muted); white-space: nowrap; }
+    .lb-box-nav { display: flex; gap: 0.5rem; }
+    .lb-box-nav button {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 1px solid var(--border); background: transparent;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--ink); transition: all 0.2s; font-size: 1rem;
+    }
+    .lb-box-nav button:hover { border-color: var(--accent); color: var(--accent); }
+    .lb-box-nav button:disabled { opacity: 0.3; cursor: default; }
+    .lb-box-item-name {
+      font-size: 0.84rem; font-weight: 500; color: var(--ink);
+      flex: 1; text-align: center;
+    }
+    .lb-box-close {
+      position: absolute; top: 1rem; right: 1rem;
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--surface);
+      cursor: pointer; font-size: 0.95rem; display: flex;
+      align-items: center; justify-content: center;
+      color: var(--ink-muted); transition: all 0.2s; line-height: 1;
+    }
+    .lb-box-close:hover { border-color: var(--ink); color: var(--ink); }
+
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="about-me.html" class="nav-logo">Nupur Savani</a>
+    <div class="nav-links">
+      <a href="about-me.html" class="active">About Me</a>
+      <a href="portfolio.html">Portfolio</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">Communications &amp; Visual Design Specialist</p>
+      <h1>Storytelling with<br/><em>strategy behind it.</em></h1>
+      <p class="hero-sub">I am passionate about advancing social impact through clear, compelling visual communication and storytelling. My work focuses on translating complex ideas and data into accessible narratives that inform, engage, and inspire action. I am particularly interested in using design and storytelling as tools to highlight pressing social and environmental challenges and to support more equitable, sustainable solutions.</p>
+      <div class="hero-btns">
+        <a href="portfolio.html" class="btn">View My Portfolio</a>
+        <a href="#experience" class="btn-outline" id="learn-more-btn">Learn More About Me</a>
+      </div>
+    </div>
+    <div class="hero-img">
+      <img src="assets/images/headshot.png" alt="Nupur Savani" />
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="resume-section" id="experience">
+
+    <!-- STICKY LABEL -->
+    <div class="sticky-section-label">
+      <span class="eyebrow">Career</span>
+      <h2>Experience</h2>
+    </div>
+
+    <div class="timeline">
+
+      <!-- UN ESCAP -->
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">Jun 2025 – Aug 2025</span>
+          <span class="timeline-tag">Internship</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Graduate Intern</h3>
+          <p class="timeline-org">United Nations ESCAP: Gender Equality &amp; Social Inclusion Section · Bangkok, Thailand</p>
+          <ul class="timeline-bullets">
+            <li>Synthesized complex gender equality and inclusion research by translating multi-country findings into visually structured policy briefs and presentation decks, enabling policymakers to quickly grasp insights and apply them in program design.</li>
+            <li>Collaborated with cross-functional teams across member states to design high-impact presentations, speeches, and workshop materials, strengthening narrative clarity and improving engagement in high-level convenings.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Columbia Climate School -->
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">Nov 2024 – May 2025</span>
+          <span class="timeline-tag">Part-time</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Communications Associate</h3>
+          <p class="timeline-org">Columbia Climate School: Center for Sustainable Urban Development · New York, NY</p>
+          <ul class="timeline-bullets">
+            <li>Translated research outputs into accessible communication products including web content, newsletters, and event materials to broaden the Center's public reach.</li>
+            <li>Supported the development of visual assets and messaging frameworks for academic and practitioner audiences across sustainability and urban development initiatives.</li>
+          </ul>
+          <div class="work-samples-row"
+               data-group="CSUD Media Content"
+               data-org="Communications Associate · Columbia Climate School"
+               data-items='[
+                 {"name":"World Urban Forum Recap","file":"assets/samples/csud/wuf_cover.png","kind":"image","types":["Visual Design"]},
+                 {"name":"Working Paper Series Cover","file":"assets/samples/csud/PRISM-working-paper.png","kind":"image","types":["Visual Design"]},
+                 {"name":"Side Event Flyer","file":"assets/samples/csud/prism-side-event.png","kind":"image","types":["Visual Design"]},
+                 {"name":"Blog Cover Photo","file":"assets/samples/csud/hatay-story.png","kind":"image","types":["Visual Design"]},
+                 {"name":"CSUD Book Announcement","file":"assets/samples/csud/usd-book.png","kind":"image","types":["Visual Design"]},
+                 {"name":"Lecture Recap","file":"assets/samples/csud/ana_gsapp_lecture.png","kind":"image","types":["Visual Design"]}
+               ]'>
+            <div class="sample-tile" data-index="0">
+              <img src="assets/samples/csud/wuf_cover.png" alt="World Urban Forum Recap" onerror="this.parentElement.innerHTML='<div class=\'tile-pdf\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z\'/><polyline points=\'14 2 14 8 20 8\'/></svg><span>Sample</span></div>'"/>
+            </div>
+            <div class="sample-tile" data-index="1">
+              <img src="assets/samples/csud/PRISM-working-paper.png" alt="Working Paper" onerror="this.parentElement.innerHTML='<div class=\'tile-pdf\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z\'/><polyline points=\'14 2 14 8 20 8\'/></svg><span>Sample</span></div>'"/>
+            </div>
+            <div class="sample-tile" data-index="2">
+              <img src="assets/samples/csud/prism-side-event.png" alt="Side Event Flyer" onerror="this.parentElement.innerHTML='<div class=\'tile-pdf\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z\'/><polyline points=\'14 2 14 8 20 8\'/></svg><span>Sample</span></div>'"/>
+            </div>
+            <div class="sample-tile" data-index="3">
+              <img src="assets/samples/csud/hatay-story.png" alt="Blog Cover" onerror="this.parentElement.innerHTML='<div class=\'tile-pdf\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z\'/><polyline points=\'14 2 14 8 20 8\'/></svg><span>Sample</span></div>'"/>
+            </div>
+            <div class="sample-tile" data-index="4">
+              <img src="assets/samples/csud/usd-book.png" alt="Book Announcement" onerror="this.parentElement.innerHTML='<div class=\'tile-pdf\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z\'/><polyline points=\'14 2 14 8 20 8\'/></svg><span>Sample</span></div>'"/>
+            </div>
+            <div class="sample-tile" data-index="5">
+              <img src="assets/samples/csud/ana_gsapp_lecture.png" alt="Lecture Recap" onerror="this.parentElement.innerHTML='<div class=\'tile-pdf\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z\'/><polyline points=\'14 2 14 8 20 8\'/></svg><span>Sample</span></div>'"/>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- World Bank KM Coordinator -->
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">Jul 2023 – Aug 2024</span>
+          <span class="timeline-tag">Full-time</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Knowledge Management Coordinator</h3>
+          <p class="timeline-org">The World Bank: Development Impact Group (DIME) · Washington, D.C.</p>
+          <ul class="timeline-bullets">
+            <li>Led development of data-driven communication campaigns by translating impact evaluation findings into compelling visual stories and digital assets, increasing donor and media engagement by 70%.</li>
+            <li>Established and scaled a unified visual identity system by aligning digital content, templates, and communication assets across teams, strengthening brand consistency for 200+ projects.</li>
+            <li>Collaborated with researchers, designers, and leadership to prototype and iterate communication products, improving clarity and usability of research outputs for non-technical audiences.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- World Bank Program Coordinator -->
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">Sep 2022 – Jun 2023</span>
+          <span class="timeline-tag">Full-time</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Program Coordinator</h3>
+          <p class="timeline-org">The World Bank: Development Impact Group (DIME) · Washington, D.C.</p>
+          <ul class="timeline-bullets">
+            <li>Redesigned department-wide communications by improving layout, hierarchy, and visual clarity across materials, enhancing engagement across a 40,000+ stakeholder network.</li>
+            <li>Led the design and launch of a multi-conference website by structuring user flows and content architecture, improving attendee experience and navigation across 9 global events.</li>
+            <li>Developed a comprehensive brand and style guide to standardize visual and narrative communication, enabling consistent storytelling across 235+ projects.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- World Bank Program Assistant -->
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">Jul 2021 – Aug 2022</span>
+          <span class="timeline-tag">Full-time</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Program Assistant — DIME Analytics &amp; Knowledge Management</h3>
+          <p class="timeline-org">The World Bank: Development Impact Group (DIME) · Washington, D.C.</p>
+          <ul class="timeline-bullets">
+            <li>Designed and produced newsletters and reports by structuring content into clear visual formats and layouts, improving internal knowledge sharing and readability.</li>
+            <li>Created engaging course materials and learning experiences by combining visual design and content development, supporting training delivery for 1,000+ participants.</li>
+            <li>Managed engaging courses by coordinating with presenters, communicating with participants, and creating impactful course content to facilitate knowledge sharing on impact evaluation methods.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- BRAC -->
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">Feb 2021 – May 2021</span>
+          <span class="timeline-tag">Internship</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Intern — Learning, Empowerment &amp; Adolescent Development</h3>
+          <p class="timeline-org">BRAC USA · Washington, D.C.</p>
+          <ul class="timeline-bullets">
+            <li>Translated program data into compelling visual and written narratives by developing reports and capacity statements, strengthening positioning for partnership and funding opportunities.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Plan International -->
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">Aug 2020 – Oct 2020</span>
+          <span class="timeline-tag">Internship</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Intern — Community Level Child Protection</h3>
+          <p class="timeline-org">Plan International USA · Washington, D.C.</p>
+          <ul class="timeline-bullets">
+            <li>Synthesized qualitative research across global teams by organizing and translating interviews into structured insights and presentation materials, supporting integration of user-centered perspectives into reports.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ILF -->
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">Jun 2020 – Aug 2020</span>
+          <span class="timeline-tag">Internship</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Program Assistant Intern</h3>
+          <p class="timeline-org">International Lifeline Fund · Washington, D.C.</p>
+          <ul class="timeline-bullets">
+            <li>Executed research and content creation for program proposals and donor reports to support fundraising and remain compliant with donor requirements.</li>
+            <li>Authored communications materials to ensure the website was up-to-date and that key stakeholders remained informed.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Search for Common Ground -->
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">Jan 2020 – Jul 2020</span>
+          <span class="timeline-tag">Internship</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Intern — Central and East Africa Program</h3>
+          <p class="timeline-org">Search for Common Ground · Washington, D.C.</p>
+          <ul class="timeline-bullets">
+            <li>Created donor-facing communication materials by designing and updating web and report content, improving clarity and consistency of organizational messaging.</li>
+            <li>Synthesized and analyzed data for project documents, capacity statements, and financial reports demonstrating transparency and accountability to existing and potential donors.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div><!-- /timeline -->
+
+    <!-- LEADERSHIP & COMMUNITY SERVICE -->
+    <div class="subsection-header">
+      <span class="eyebrow">Giving Back</span>
+      <h3>Leadership &amp; Community Service</h3>
+    </div>
+
+    <div class="timeline">
+
+      <!-- EFWG -->
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">Jan 2025 – Dec 2025</span>
+          <span class="timeline-tag">Student Org</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Communications and Social Media Chair</h3>
+          <p class="timeline-org">SIPA Ethical Fashion Working Group · Columbia University</p>
+          <ul class="timeline-bullets">
+            <li>Led all external communications and social media for the organization, producing event flyers, promotional graphics, and animated content across platforms.</li>
+          </ul>
+          <div class="work-samples-row"
+               data-group="EFWG Social Media Content"
+               data-org="Communications and Social Media Chair · Ethical Fashion Working Group"
+               data-items='[
+                 {"name":"Upcycling Workshop Flyer","file":"assets/samples/efwg/efwg-barnard-upcylcing-workshop.png","kind":"image","types":["Visual Design","Social Media Content"]},
+                 {"name":"Fall Clothing Swap Flyer","file":"assets/samples/efwg/fall_clothing_swap.png","kind":"image","types":["Visual Design","Social Media Content"]},
+                 {"name":"Fashion Speaker Panel Flyer","file":"assets/samples/efwg/fashion_speaks_panel.png","kind":"image","types":["Visual Design","Social Media Content"]},
+                 {"name":"Fall Clothing Drive Flyer","file":"assets/samples/efwg/efwg-fall-clothing drive.pdf","kind":"pdf","types":["Visual Design","Social Media Content"]},
+                 {"name":"Fall Social Flyer","file":"assets/samples/efwg/efwg-25-cw-social.png","kind":"image","types":["Visual Design","Social Media Content"]},
+                 {"name":"Fireside Chat Flyer","file":"assets/samples/efwg/efwg-fireside-chat.png","kind":"image","types":["Visual Design","Social Media Content"]},
+                 {"name":"Spring Social Animated Flyer","file":"assets/samples/efwg/efwg-social-animated-flyer.mp4","kind":"video","types":["Visual Design","Social Media Content"]}
+               ]'>
+            <div class="sample-tile" data-index="0">
+              <img src="assets/samples/efwg/efwg-barnard-upcylcing-workshop.png" alt="Upcycling Workshop" onerror="this.parentElement.innerHTML='<div class=\'tile-pdf\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z\'/><polyline points=\'14 2 14 8 20 8\'/></svg><span>Sample</span></div>'"/>
+            </div>
+            <div class="sample-tile" data-index="1">
+              <img src="assets/samples/efwg/fall_clothing_swap.png" alt="Clothing Swap" onerror="this.parentElement.innerHTML='<div class=\'tile-pdf\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z\'/><polyline points=\'14 2 14 8 20 8\'/></svg><span>Sample</span></div>'"/>
+            </div>
+            <div class="sample-tile" data-index="2">
+              <img src="assets/samples/efwg/fashion_speaks_panel.png" alt="Fashion Panel" onerror="this.parentElement.innerHTML='<div class=\'tile-pdf\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z\'/><polyline points=\'14 2 14 8 20 8\'/></svg><span>Sample</span></div>'"/>
+            </div>
+            <div class="sample-tile" data-index="3">
+              <div class="tile-pdf">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <span>PDF</span>
+              </div>
+            </div>
+            <div class="sample-tile" data-index="4">
+              <img src="assets/samples/efwg/efwg-25-cw-social.png" alt="Fall Social" onerror="this.parentElement.innerHTML='<div class=\'tile-pdf\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z\'/><polyline points=\'14 2 14 8 20 8\'/></svg><span>Sample</span></div>'"/>
+            </div>
+            <div class="sample-tile" data-index="5">
+              <img src="assets/samples/efwg/efwg-fireside-chat.png" alt="Fireside Chat" onerror="this.parentElement.innerHTML='<div class=\'tile-pdf\'><svg viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'1.5\'><path d=\'M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z\'/><polyline points=\'14 2 14 8 20 8\'/></svg><span>Sample</span></div>'"/>
+            </div>
+            <div class="sample-tile" data-index="6">
+              <div class="tile-pdf">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
+                <span>Video</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WFP -->
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">Jul 2019 – Sep 2019</span>
+          <span class="timeline-tag">Volunteer</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Volunteer Assistant</h3>
+          <p class="timeline-org">World Food Programme · Nairobi, Kenya</p>
+          <ul class="timeline-bullets">
+            <li>Reviewed policies and created reports for acute malnutrition programs to improve tracking and streamlining of nutrition services for vulnerable populations.</li>
+            <li>Identified gaps and made amendments to WFP's cash-based transfers business process model to reduce operational challenges across 70+ countries using the SCOPE digital humanitarian aid delivery platform.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Lutheran -->
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">Feb 2019 – May 2019</span>
+          <span class="timeline-tag">Volunteer</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Family and Youth Mentor — Refugee Resettlement Program</h3>
+          <p class="timeline-org">Lutheran Social Services · Washington, D.C.</p>
+          <ul class="timeline-bullets">
+            <li>Engaged with refugee families to facilitate cultural acclimation and parental involvement in children's education through navigation of local education systems.</li>
+            <li>Assisted three special needs children (ages 4, 12, and 20) with literacy attainment, ESL instruction, and homework support.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="resume-section" id="education">
+
+    <!-- STICKY LABEL -->
+    <div class="sticky-section-label">
+      <span class="eyebrow">Academic Background</span>
+      <h2>Education</h2>
+    </div>
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">May 2026</span>
+          <span class="timeline-tag">Graduate</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Master of Public Administration, Development Practice</h3>
+          <p class="timeline-org">Columbia University, School of International and Public Affairs · New York, NY</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-meta">
+          <span class="timeline-date">May 2021</span>
+          <span class="timeline-tag">Undergraduate</span>
+        </div>
+        <div class="timeline-content">
+          <h3>Bachelor of Arts in International Affairs</h3>
+          <p class="timeline-org">The George Washington University, Elliott School of International Affairs · Washington, D.C.</p>
+          <p class="timeline-detail">Concentration: International Development, Africa &nbsp;·&nbsp; Minor: Sustainability &nbsp;·&nbsp; Dean's List</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SKILLS -->
+    <div class="subsection-header" style="margin-top: 3.5rem;">
+      <span class="eyebrow">Toolkit</span>
+      <h3>Skills</h3>
+    </div>
+
+    <div class="skills-categories">
+      <div class="skills-group">
+        <p class="skills-group-label">Design</p>
+        <div class="skills-row">
+          <div class="skill-chip">Adobe Creative Suite</div>
+          <div class="skill-chip">Figma</div>
+          <div class="skill-chip">Canva</div>
+          <div class="skill-chip">Google Slides</div>
+          <div class="skill-chip">FigJam / Figma Slides</div>
+          <div class="skill-chip">Motion &amp; Prototyping</div>
+        </div>
+      </div>
+      <div class="skills-group">
+        <p class="skills-group-label">Digital &amp; Content</p>
+        <div class="skills-row">
+          <div class="skill-chip">WordPress</div>
+          <div class="skill-chip">Salesforce</div>
+          <div class="skill-chip">Data Visualization</div>
+          <div class="skill-chip">ArcGIS</div>
+        </div>
+      </div>
+      <div class="skills-group">
+        <p class="skills-group-label">Research</p>
+        <div class="skills-row">
+          <div class="skill-chip">SurveyCTO</div>
+          <div class="skill-chip">Qualtrics</div>
+          <div class="skill-chip">R</div>
+          <div class="skill-chip">STATA</div>
+          <div class="skill-chip">Qualitative Research</div>
+          <div class="skill-chip">Quantitative Research</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 Nupur Savani &nbsp;·&nbsp; <a href="mailto:nupursavani@gmail.com">nupursavani@gmail.com</a> &nbsp;·&nbsp; <a href="https://linkedin.com/in/nupursavani" target="_blank">LinkedIn</a></p>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div class="lb-overlay" id="lb-overlay">
+    <div class="lb-box">
+      <button class="lb-box-close" id="lb-close">✕</button>
+      <div class="lb-box-header">
+        <p class="lb-box-org" id="lb-org"></p>
+        <h2 class="lb-box-title" id="lb-title"></h2>
+        <div class="lb-box-types" id="lb-types"></div>
+      </div>
+      <div class="lb-box-media" id="lb-media"></div>
+      <div class="lb-box-footer">
+        <div class="lb-box-nav">
+          <button id="lb-prev">←</button>
+          <button id="lb-next">→</button>
+        </div>
+        <span class="lb-box-item-name" id="lb-item-name"></span>
+        <span class="lb-box-counter" id="lb-counter"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // ── Smooth scroll for "Learn More About Me" ──
+    document.getElementById('learn-more-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('experience').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // ── Lightbox logic ──
+    const overlay = document.getElementById('lb-overlay');
+    const lbOrg = document.getElementById('lb-org');
+    const lbTitle = document.getElementById('lb-title');
+    const lbTypes = document.getElementById('lb-types');
+    const lbMedia = document.getElementById('lb-media');
+    const lbItemName = document.getElementById('lb-item-name');
+    const lbCounter = document.getElementById('lb-counter');
+    const lbPrev = document.getElementById('lb-prev');
+    const lbNext = document.getElementById('lb-next');
+    const lbClose = document.getElementById('lb-close');
+
+    let currentItems = [];
+    let currentIndex = 0;
+
+    function renderLbItem(index) {
+      const item = currentItems[index];
+      lbItemName.textContent = item.name;
+      lbCounter.textContent = `${index + 1} / ${currentItems.length}`;
+      lbPrev.disabled = index === 0;
+      lbNext.disabled = index === currentItems.length - 1;
+
+      lbTypes.innerHTML = item.types.map(t =>
+        `<span class="lb-type-tag">${t}</span>`
+      ).join('');
+
+      lbMedia.innerHTML = '';
+      if (item.kind === 'pdf') {
+        const iframe = document.createElement('iframe');
+        iframe.src = item.file;
+        iframe.title = item.name;
+        lbMedia.appendChild(iframe);
+      } else if (item.kind === 'image') {
+        const img = document.createElement('img');
+        img.src = item.file;
+        img.alt = item.name;
+        lbMedia.appendChild(img);
+      } else if (item.kind === 'video') {
+        const vid = document.createElement('video');
+        vid.src = item.file;
+        vid.controls = true;
+        lbMedia.appendChild(vid);
+      }
+    }
+
+    function openLightbox(row, startIndex) {
+      currentItems = JSON.parse(row.dataset.items);
+      currentIndex = startIndex;
+      lbOrg.textContent = row.dataset.org;
+      lbTitle.textContent = row.dataset.group;
+      renderLbItem(currentIndex);
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      lbMedia.innerHTML = '';
+    }
+
+    // Attach click to every sample tile
+    document.querySelectorAll('.work-samples-row').forEach(row => {
+      row.querySelectorAll('.sample-tile').forEach(tile => {
+        tile.addEventListener('click', () => {
+          openLightbox(row, parseInt(tile.dataset.index));
+        });
+      });
+    });
+
+    lbClose.addEventListener('click', closeLightbox);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeLightbox(); });
+
+    lbPrev.addEventListener('click', e => {
+      e.stopPropagation();
+      if (currentIndex > 0) { currentIndex--; renderLbItem(currentIndex); }
+    });
+    lbNext.addEventListener('click', e => {
+      e.stopPropagation();
+      if (currentIndex < currentItems.length - 1) { currentIndex++; renderLbItem(currentIndex); }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (!overlay.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft' && currentIndex > 0) { currentIndex--; renderLbItem(currentIndex); }
+      if (e.key === 'ArrowRight' && currentIndex < currentItems.length - 1) { currentIndex++; renderLbItem(currentIndex); }
+    });
+  </script>
+</body>
+</html>
