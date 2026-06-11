@@ -40,7 +40,7 @@ img { max-width: 100%; display: block; }
 }
 .nav-logo {
   font-family: var(--font-display);
-  font-size: 2rem;
+  font-size: 2.1rem;
   letter-spacing: -0.01em;
   color: #ffffff;
 }
