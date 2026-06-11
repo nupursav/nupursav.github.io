@@ -48,12 +48,17 @@ img { max-width: 100%; display: block; }
 .nav-links a {
   font-size: 1rem;
   font-weight: 400;
-  color: rgba(255,255,255,0.72);
+  color: #ffffff;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   transition: color 0.2s;
 }
-.nav-links a:hover, .nav-links a.active { color: #ffffff; }
+.nav-links a:hover { color: rgba(255,255,255,0.55); }
+.nav-links a.active {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
 
 /* ─── EYEBROW ─────────────────────────────────── */
 .eyebrow {
